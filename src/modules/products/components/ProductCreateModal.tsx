@@ -33,7 +33,7 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
     useEffect(() => {
         const fetchCategories = async () => {
             const result = await getCategoryList();
-            setCategories(result.data);
+            setCategories(result);
         };
 
         fetchCategories();
