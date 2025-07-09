@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { IProduct } from "../models/IProduct";
+import { getCategoryList } from "../services/productService";
 
 interface ProductCreateModalProps {
     open: boolean;
@@ -27,6 +28,16 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
         images: [],
         thumbnail: "",
     });
+    const [categories, setCategories] = useState<string[]>([]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            const result = await getCategoryList();
+            setCategories(result.data);
+        };
+
+        fetchCategories();
+    }, []);
 
     useEffect(() => {
         if (productToEdit) {
@@ -176,15 +187,23 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
                         <label className="block text-gray-700 font-medium mb-1 text-xs">
                             Categoría <span className="text-red-500">*</span>
                         </label>
-                        <input
-                            type="text"
-                            value={product.category || ""}
+                        <select
+                            value={product.category}
                             onChange={(e) =>
                                 updateProduct("category", e.target.value)
                             }
                             className="w-full border border-gray-300 rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
                             required
-                        />
+                        >
+                            <option value="" disabled>
+                                Selecciona una categoría
+                            </option>
+                            {categories.map((cat) => (
+                                <option key={cat} value={cat}>
+                                    {cat}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div className="flex gap-2">
                         <div className="flex-1">

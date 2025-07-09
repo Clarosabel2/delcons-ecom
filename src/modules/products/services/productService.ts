@@ -14,3 +14,6 @@ export const updateProduct = (idProduct: number, product: Partial<IProduct>) =>
     api.put(`/products/${idProduct}`);
 
 export const deleteProductById = (idProduct: number) => api.delete("/products");
+
+export const getCategoryList = () =>
+    api.get<string[]>("products/category-list");
