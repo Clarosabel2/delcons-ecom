@@ -67,27 +67,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }, []);
 
     const login = async (credentials: LoginRequest) => {
-        const firebaseUser = await loginWithEmail(credentials);
-        const token = await firebaseUser.getIdToken();
-        const userData = await getUserData(firebaseUser.uid);
-        const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
-
-        const user: IUser = {
-            uid: firebaseUser.uid,
-            email: userData.email ?? "",
-            username: userData.username ?? "",
-            photoImage:
-                userData.photoImage ??
-                "https://www.pngall.com/wp-content/uploads/15/User-PNG-Photos.png",
-            firstName: userData.firstName ?? "",
-            lastName: userData.lastName ?? "",
-            gender: userData.gender ?? "",
-            role: userData.role,
-        };
-
-        setUser(user);
-        setAccessToken(token);
-        setIsLogin(true);
+        await loginWithEmail(credentials); // solo autentica, no hace nada más
     };
 
     const logout = () => {
