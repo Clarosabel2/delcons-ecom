@@ -13,3 +13,8 @@
 .animate-fade-in-modal {
   animation: fade-in-modal 0.3s ease-out forwards;
 }
+
+.cart-phone {
+  box-shadow: 0px -2px 20px rgba(0, 0, 0, 0.3);
+}
+  

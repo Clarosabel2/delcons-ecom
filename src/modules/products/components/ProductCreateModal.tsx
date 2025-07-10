@@ -17,6 +17,7 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
     productToEdit,
 }) => {
     const [product, setProduct] = useState<IProduct>({
+        id:"",
         title: "",
         description: "",
         category: "",
@@ -29,13 +30,16 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
         thumbnail: "",
     });
     const [categories, setCategories] = useState<string[]>([]);
+    const [applyDiscount, setApplyDiscount] = useState(false);
+    const [discount, setDiscount] = useState("");
+    const [showDetails, setShowDetails] = useState(false);
+    const [dimensions, setDimensions] = useState({ width: '', height: '', depth: '' });
 
     useEffect(() => {
         const fetchCategories = async () => {
             const result = await getCategoryList();
             setCategories(result);
         };
-
         fetchCategories();
     }, []);
 
@@ -114,6 +118,7 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
     // Función para resetear el formulario
     const resetForm = () => {
         setProduct({
+            id:"",
             title: "",
             description: "",
             category: "",
@@ -179,7 +184,7 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
                             onChange={(e) =>
                                 updateProduct("description", e.target.value)
                             }
-                            className="w-full border border-gray-300 rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
+                            className="w-full h-auto border border-gray-300 rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm field-sizing-content"
                             required
                         />
                     </div>
@@ -243,6 +248,29 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
                             />
                         </div>
                     </div>
+                    <div className="flex items-center gap-2">
+                        <input
+                            type="checkbox"
+                            id="apply-discount"
+                            checked={applyDiscount}
+                            onChange={(e) => setApplyDiscount(e.target.checked)}
+                        />
+                        <label htmlFor="apply-discount" className="block text-gray-700 font-medium text-xs">
+                            Aplicar descuento
+                        </label>
+                        {applyDiscount && (
+                            <input
+                                type="number"
+                                min={1}
+                                max={100}
+                                value={discount}
+                                onChange={(e) => setDiscount(e.target.value)}
+                                placeholder="Porcentaje de descuento"
+                                className="w-full border border-gray-300 rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
+                            />
+                        )}
+                    </div>
+                    
                     <div>
                         <label className="block text-gray-700 font-medium mb-1 text-xs">
                             Marca <span className="text-red-500">*</span>
@@ -325,6 +353,94 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
                             placeholder="https://..."
                         />
                     </div>
+                    <div className="flex items-center gap-2">
+                        <input
+                            type="checkbox"
+                            id="show-details"
+                            checked={showDetails}
+                            onChange={(e) => setShowDetails(e.target.checked)}
+                        />
+                        <label htmlFor="show-details" className="block text-gray-700 font-medium text-xs">
+                            Agregar más detalles
+                        </label>
+                    </div>
+                    {showDetails && (
+                        <div className="space-y-2 border border-gray-200 rounded-md p-3 mt-2 bg-gray-50">
+                            <div>
+                                <label className="block text-gray-700 font-medium mb-1 text-xs">Peso (kg)</label>
+                                <input
+                                    type="number"
+                                    value={product.weight || ''}
+                                    onChange={e => updateProduct('weight', e.target.value)}
+                                    className="w-full border border-gray-300 rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
+                                    min={0}
+                                />
+                            </div>
+                            <div className="flex gap-2">
+                                <div className="flex-1">
+                                    <label className="block text-gray-700 font-medium mb-1 text-xs">Ancho (cm)</label>
+                                    <input
+                                        type="number"
+                                        value={dimensions.width}
+                                        onChange={e => setDimensions(d => ({ ...d, width: e.target.value }))}
+                                        onBlur={() => updateProduct('dimensions', { ...dimensions, width: dimensions.width })}
+                                        className="w-full border border-gray-300 rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
+                                        min={0}
+                                    />
+                                </div>
+                                <div className="flex-1">
+                                    <label className="block text-gray-700 font-medium mb-1 text-xs">Alto (cm)</label>
+                                    <input
+                                        type="number"
+                                        value={dimensions.height}
+                                        onChange={e => setDimensions(d => ({ ...d, height: e.target.value }))}
+                                        onBlur={() => updateProduct('dimensions', { ...dimensions, height: dimensions.height })}
+                                        className="w-full border border-gray-300 rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
+                                        min={0}
+                                    />
+                                </div>
+                                <div className="flex-1">
+                                    <label className="block text-gray-700 font-medium mb-1 text-xs">Profundidad (cm)</label>
+                                    <input
+                                        type="number"
+                                        value={dimensions.depth}
+                                        onChange={e => setDimensions(d => ({ ...d, depth: e.target.value }))}
+                                        onBlur={() => updateProduct('dimensions', { ...dimensions, depth: dimensions.depth })}
+                                        className="w-full border border-gray-300 rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
+                                        min={0}
+                                    />
+                                </div>
+                            </div>
+                            <div>
+                                <label className="block text-gray-700 font-medium mb-1 text-xs">Información de envío</label>
+                                <input
+                                    type="text"
+                                    value={product.shippingInformation || ''}
+                                    onChange={e => updateProduct('shippingInformation', e.target.value)}
+                                    className="w-full border border-gray-300 rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-gray-700 font-medium mb-1 text-xs">Política de devoluciones</label>
+                                <input
+                                    type="text"
+                                    value={product.returnPolicy || ''}
+                                    onChange={e => updateProduct('returnPolicy', e.target.value)}
+                                    className="w-full border border-gray-300 rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-gray-700 font-medium mb-1 text-xs">Cantidad mínima de compra</label>
+                                <input
+                                    type="number"
+                                    value={product.minimumOrderQuantity || ''}
+                                    onChange={e => updateProduct('minimumOrderQuantity', e.target.value)}
+                                    className="w-full border border-gray-300 rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
+                                    min={1}
+                                />
+                            </div>
+                        </div>
+                    )}
                     <div className="flex justify-end gap-2 mt-3">
                         <button
                             type="button"

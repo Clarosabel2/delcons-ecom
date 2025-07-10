@@ -15,9 +15,9 @@ interface CartContextProps {
     isAddItem: boolean;
     hasItems: boolean;
     addItem: (item: Item) => void;
-    removeItem: (itemId: number) => void;
+    removeItem: (itemId: string) => void;
     clearCart: () => void;
-    updateItemQuantity: (productId: number, newQuantity: number) => void;
+    updateItemQuantity: (productId: string, newQuantity: number) => void;
 }
 
 interface CartProviderProps {
@@ -67,8 +67,7 @@ export default function CartProvider({
         }, 900);
     };
 
-    const updateItemQuantity = (productId: number, newQuantity: number) => {
-        console.log("updateItemQuantity", productId, newQuantity);
+    const updateItemQuantity = (productId: string, newQuantity: number) => {
         setCart((prevCart) => {
             const existing = prevCart.items.find(
                 (i) => i.product.id === productId
@@ -87,7 +86,7 @@ export default function CartProvider({
         });
     };
 
-    const removeItem = (productId: number) => {
+    const removeItem = (productId: string) => {
         const newCart = new Cart([...cart.items]);
         newCart.removeItem(productId);
         setCart(newCart);

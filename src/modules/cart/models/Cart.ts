@@ -22,7 +22,6 @@ export default class Cart {
     calculateAmount(): number {
         return this.items.reduce((total, item) => {
             const a = total + item.product.price * item.quantity;
-            console.log("Total: " + a);
             return a;
         }, 0);
     }
@@ -41,7 +40,6 @@ export class Item {
     }
 
     calculateSubtotal(): number {
-        console.log("Subtotal: " + this.product.price * this.quantity);
         return this.product.price * this.quantity;
     }
 }

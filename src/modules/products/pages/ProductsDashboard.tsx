@@ -28,7 +28,27 @@ import LoadingSpinner from "../../shared/components/LoadingSpinner";
 const columns: DataTableColumn<IProduct>[] = [
     { key: "title", label: "Nombre" },
     { key: "price", label: "Precio", render: (row) => `$${row.price}` },
-    { key: "stock", label: "Stock" },
+    {
+        key: "stock",
+        label: "Stock",
+        render: (row) => {
+            const stock = row.stock ?? 0;
+            let color = "bg-green-100 text-green-800";
+            let label = "Stock suficiente";
+            if (stock === 0) {
+                color = "bg-red-100 text-red-800";
+                label = "Sin stock";
+            } else if (stock > 0 && stock <= 10) {
+                color = "bg-yellow-100 text-yellow-800";
+                label = "Poco stock";
+            }
+            return (
+                <span className={`px-2 py-1 rounded text-xs font-semibold ${color}`}>
+                    {stock} <span className="ml-1">({label})</span>
+                </span>
+            );
+        },
+    },
     { key: "category", label: "Categoria" },
 ];
 

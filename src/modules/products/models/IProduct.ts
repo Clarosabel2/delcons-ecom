@@ -3,7 +3,7 @@ import { IMeta } from "./IMeta";
 import { IReview } from "./IReview";
 
 export interface IProduct {
-    id?: string;
+    id: string;
     title?: string;
     description?: string;
     category?: string;
