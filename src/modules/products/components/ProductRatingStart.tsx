@@ -16,9 +16,9 @@ export default function ProductRatingStar({ rate, className }: Props) {
                 return full ? (
                     <Star key={i} className="text-yellow-400" />
                 ) : half ? (
-                    <StarHalf key={i} className="text-yellow-300" />
+                    <Star key={i} className="text-yellow-300" />
                 ) : (
-                    <StarOff key={i} className="text-white" />
+                    <StarOff key={i} className="text-gray-100" />
                 );
             })}
         </div>

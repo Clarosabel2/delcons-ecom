@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { IProduct } from "../models/IProduct";
 import { getCategoryList } from "../services/productService";
+import clsx from "clsx";
 
 interface ProductCreateModalProps {
     open: boolean;
@@ -17,7 +18,7 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
     productToEdit,
 }) => {
     const [product, setProduct] = useState<IProduct>({
-        id:"",
+        id: "",
         title: "",
         description: "",
         category: "",
@@ -33,7 +34,11 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
     const [applyDiscount, setApplyDiscount] = useState(false);
     const [discount, setDiscount] = useState("");
     const [showDetails, setShowDetails] = useState(false);
-    const [dimensions, setDimensions] = useState({ width: '', height: '', depth: '' });
+    const [dimensions, setDimensions] = useState({
+        width: "",
+        height: "",
+        depth: "",
+    });
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -55,17 +60,13 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
 
     const [error, setError] = useState("");
 
-    // Función genérica para actualizar el producto
     const updateProduct = (field: keyof IProduct, value: any) => {
         setProduct((prev) => ({ ...prev, [field]: value }));
     };
 
-    // Función para manejar el envío del formulario
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
-
-        // Validaciones básicas
         if (!product.title?.trim()) {
             setError("El nombre es requerido");
             return;
@@ -95,7 +96,6 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
             return;
         }
 
-        // Limpiar espacios en blanco
         const cleanProduct: IProduct = {
             ...product,
             title: product.title?.trim(),
@@ -110,15 +110,13 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
             onCreate(cleanProduct);
         }
 
-        // Limpiar el formulario
         resetForm();
         onClose();
     };
 
-    // Función para resetear el formulario
     const resetForm = () => {
         setProduct({
-            id:"",
+            id: "",
             title: "",
             description: "",
             category: "",
@@ -133,7 +131,6 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
         setError("");
     };
 
-    // Función para cerrar el modal
     const handleClose = () => {
         resetForm();
         onClose();
@@ -143,7 +140,12 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-xs">
-            <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md relative animate-fade-in-modal text-sm">
+            <div
+                className={clsx(
+                    "bg-white/80 rounded-2xl shadow-2xl p-6 w-full max-w-md relative animate-fade-in-modal text-sm max-h-[90vh] overflow-y-auto mx-4",
+                    showDetails && "overflow-y-scroll"
+                )}
+            >
                 <button
                     onClick={handleClose}
                     className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-lg"
@@ -255,7 +257,10 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
                             checked={applyDiscount}
                             onChange={(e) => setApplyDiscount(e.target.checked)}
                         />
-                        <label htmlFor="apply-discount" className="block text-gray-700 font-medium text-xs">
+                        <label
+                            htmlFor="apply-discount"
+                            className="block text-gray-700 font-medium text-xs"
+                        >
                             Aplicar descuento
                         </label>
                         {applyDiscount && (
@@ -270,7 +275,7 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
                             />
                         )}
                     </div>
-                    
+
                     <div>
                         <label className="block text-gray-700 font-medium mb-1 text-xs">
                             Marca <span className="text-red-500">*</span>
@@ -360,81 +365,145 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
                             checked={showDetails}
                             onChange={(e) => setShowDetails(e.target.checked)}
                         />
-                        <label htmlFor="show-details" className="block text-gray-700 font-medium text-xs">
+                        <label
+                            htmlFor="show-details"
+                            className="block text-gray-700 font-medium text-xs"
+                        >
                             Agregar más detalles
                         </label>
                     </div>
                     {showDetails && (
                         <div className="space-y-2 border border-gray-200 rounded-md p-3 mt-2 bg-gray-50">
                             <div>
-                                <label className="block text-gray-700 font-medium mb-1 text-xs">Peso (kg)</label>
+                                <label className="block text-gray-700 font-medium mb-1 text-xs">
+                                    Peso (kg)
+                                </label>
                                 <input
                                     type="number"
-                                    value={product.weight || ''}
-                                    onChange={e => updateProduct('weight', e.target.value)}
+                                    value={product.weight || ""}
+                                    onChange={(e) =>
+                                        updateProduct("weight", e.target.value)
+                                    }
                                     className="w-full border border-gray-300 rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
                                     min={0}
                                 />
                             </div>
                             <div className="flex gap-2">
                                 <div className="flex-1">
-                                    <label className="block text-gray-700 font-medium mb-1 text-xs">Ancho (cm)</label>
+                                    <label className="block text-gray-700 font-medium mb-1 text-xs">
+                                        Ancho (cm)
+                                    </label>
                                     <input
                                         type="number"
                                         value={dimensions.width}
-                                        onChange={e => setDimensions(d => ({ ...d, width: e.target.value }))}
-                                        onBlur={() => updateProduct('dimensions', { ...dimensions, width: dimensions.width })}
+                                        onChange={(e) =>
+                                            setDimensions((d) => ({
+                                                ...d,
+                                                width: e.target.value,
+                                            }))
+                                        }
+                                        onBlur={() =>
+                                            updateProduct("dimensions", {
+                                                ...dimensions,
+                                                width: dimensions.width,
+                                            })
+                                        }
                                         className="w-full border border-gray-300 rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
                                         min={0}
                                     />
                                 </div>
                                 <div className="flex-1">
-                                    <label className="block text-gray-700 font-medium mb-1 text-xs">Alto (cm)</label>
+                                    <label className="block text-gray-700 font-medium mb-1 text-xs">
+                                        Alto (cm)
+                                    </label>
                                     <input
                                         type="number"
                                         value={dimensions.height}
-                                        onChange={e => setDimensions(d => ({ ...d, height: e.target.value }))}
-                                        onBlur={() => updateProduct('dimensions', { ...dimensions, height: dimensions.height })}
+                                        onChange={(e) =>
+                                            setDimensions((d) => ({
+                                                ...d,
+                                                height: e.target.value,
+                                            }))
+                                        }
+                                        onBlur={() =>
+                                            updateProduct("dimensions", {
+                                                ...dimensions,
+                                                height: dimensions.height,
+                                            })
+                                        }
                                         className="w-full border border-gray-300 rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
                                         min={0}
                                     />
                                 </div>
                                 <div className="flex-1">
-                                    <label className="block text-gray-700 font-medium mb-1 text-xs">Profundidad (cm)</label>
+                                    <label className="block text-gray-700 font-medium mb-1 text-xs">
+                                        Profundidad (cm)
+                                    </label>
                                     <input
                                         type="number"
                                         value={dimensions.depth}
-                                        onChange={e => setDimensions(d => ({ ...d, depth: e.target.value }))}
-                                        onBlur={() => updateProduct('dimensions', { ...dimensions, depth: dimensions.depth })}
+                                        onChange={(e) =>
+                                            setDimensions((d) => ({
+                                                ...d,
+                                                depth: e.target.value,
+                                            }))
+                                        }
+                                        onBlur={() =>
+                                            updateProduct("dimensions", {
+                                                ...dimensions,
+                                                depth: dimensions.depth,
+                                            })
+                                        }
                                         className="w-full border border-gray-300 rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
                                         min={0}
                                     />
                                 </div>
                             </div>
                             <div>
-                                <label className="block text-gray-700 font-medium mb-1 text-xs">Información de envío</label>
+                                <label className="block text-gray-700 font-medium mb-1 text-xs">
+                                    Información de envío
+                                </label>
                                 <input
                                     type="text"
-                                    value={product.shippingInformation || ''}
-                                    onChange={e => updateProduct('shippingInformation', e.target.value)}
+                                    value={product.shippingInformation || ""}
+                                    onChange={(e) =>
+                                        updateProduct(
+                                            "shippingInformation",
+                                            e.target.value
+                                        )
+                                    }
                                     className="w-full border border-gray-300 rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
                                 />
                             </div>
                             <div>
-                                <label className="block text-gray-700 font-medium mb-1 text-xs">Política de devoluciones</label>
+                                <label className="block text-gray-700 font-medium mb-1 text-xs">
+                                    Política de devoluciones
+                                </label>
                                 <input
                                     type="text"
-                                    value={product.returnPolicy || ''}
-                                    onChange={e => updateProduct('returnPolicy', e.target.value)}
+                                    value={product.returnPolicy || ""}
+                                    onChange={(e) =>
+                                        updateProduct(
+                                            "returnPolicy",
+                                            e.target.value
+                                        )
+                                    }
                                     className="w-full border border-gray-300 rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
                                 />
                             </div>
                             <div>
-                                <label className="block text-gray-700 font-medium mb-1 text-xs">Cantidad mínima de compra</label>
+                                <label className="block text-gray-700 font-medium mb-1 text-xs">
+                                    Cantidad mínima de compra
+                                </label>
                                 <input
                                     type="number"
-                                    value={product.minimumOrderQuantity || ''}
-                                    onChange={e => updateProduct('minimumOrderQuantity', e.target.value)}
+                                    value={product.minimumOrderQuantity || ""}
+                                    onChange={(e) =>
+                                        updateProduct(
+                                            "minimumOrderQuantity",
+                                            e.target.value
+                                        )
+                                    }
                                     className="w-full border border-gray-300 rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
                                     min={1}
                                 />

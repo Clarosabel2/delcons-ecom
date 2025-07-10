@@ -62,15 +62,21 @@ export default function ProductCard({ product }: ProductCardProps) {
                 </h3>
 
                 {/* Rating */}
-                <div className="flex items-center gap-2 mb-3">
-                    <ProductRatingStar
-                        rate={product.rating ?? 0}
-                        className="text-xs"
-                    />
-                    <span className="text-xs text-gray-500 hover:underline">
-                        ({product.reviews?.length ?? 0})
-                    </span>
-                </div>
+                {product.reviews!=null && product.reviews?.length > 0 ? (
+                    <div className="flex items-center mb-3">
+                        <ProductRatingStar
+                            rate={product.rating ?? 0}
+                            className="text-xs"
+                        />
+                        <span className="text-xs text-gray-500 hover:underline">
+                            ({product.reviews.length})
+                        </span>
+                    </div>
+                ) : (
+                    <div className="text-xs text-gray-500 mb-3">
+                        Sin opiniones
+                    </div>
+                )}
 
                 {/* Precio y stock */}
                 <div className="flex items-center justify-between">
