@@ -4,27 +4,26 @@ import { IProduct } from "../models/IProduct";
 import ProductCard from "../components/ProductCard";
 import LoadingSpinner from "../../shared/components/LoadingSpinner";
 import CartPhone from "../../cart/components/CartPhone";
-import { getAllProducts } from "../services/products.service";
+import {
+    getAllProducts,
+    getProductsByCategories,
+} from "../services/products.service";
 import ProductFilters from "../components/ProductFilters";
 import { getCategoryList } from "../services/productService";
 
 export default function ProductsPage() {
     const [products, setProducts] = useState<IProduct[]>([]);
+    const [productsFiltered, setProductsFiltered] = useState<IProduct[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [categories, setCategories] = useState<string[]>([]);
     const [categoriesSelected, setCategoriesSelected] = useState<string[]>([]);
 
     useEffect(() => {
-        console.log(categoriesSelected);
-    }, [categoriesSelected]);
-    useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const resProducts = await getAllProducts();
-                const resCategories = await getCategoryList();
-                setProducts(resProducts);
-                setCategories(resCategories);
+                setProducts(await getAllProducts());
+                setCategories(await getCategoryList());
             } catch (err) {
                 setError("Error al cargar productos");
             } finally {
@@ -32,7 +31,18 @@ export default function ProductsPage() {
             }
         };
         fetchProducts();
-    }, []);
+    });
+
+    useEffect(() => {
+        if (categoriesSelected.length === 0) {
+            setProductsFiltered(products);
+        } else {
+            const filtered = products.filter((product) =>
+                categoriesSelected.includes(product.category)
+            );
+            setProductsFiltered(filtered);
+        }
+    }, [categoriesSelected]);
 
     if (loading) return <LoadingSpinner />;
 
@@ -64,12 +74,26 @@ export default function ProductsPage() {
 
                         <main className="z-0 w-full lg:w-3/4">
                             <div className="relative grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                                {products.map((product) => (
-                                    <ProductCard
-                                        key={product.id}
-                                        product={product}
-                                    />
-                                ))}
+                                {categoriesSelected.length === 0 ? (
+                                    products.map((product) => (
+                                        <ProductCard
+                                            key={product.id}
+                                            product={product}
+                                        />
+                                    ))
+                                ) : productsFiltered &&
+                                  productsFiltered.length > 0 ? (
+                                    productsFiltered.map((product) => (
+                                        <ProductCard
+                                            key={product.id}
+                                            product={product}
+                                        />
+                                    ))
+                                ) : (
+                                    <p className="text-sm text-gray-500 w-full">
+                                        No hay productos para mostrar.
+                                    </p>
+                                )}
                             </div>
                         </main>
                     </div>

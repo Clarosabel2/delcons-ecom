@@ -96,6 +96,20 @@ export async function getProductById(id: string): Promise<IProduct> {
     }
 }
 
+export async function getProductsByCategories(categoriesSelected: string[]): Promise<IProduct[]> {
+    if (categoriesSelected.length === 0) return [];
+    const q = query(
+        collection(db, "products"),
+        where("category", "in", categoriesSelected.slice(0, 10))
+    );
+
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...(doc.data() as Omit<IProduct, "id">),
+    }));
+}
+
 export async function addProduct(
     product: Omit<IProduct, "id">
 ): Promise<string> {
