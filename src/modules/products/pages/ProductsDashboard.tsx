@@ -28,12 +28,12 @@ import LoadingSpinner from "../../shared/components/LoadingSpinner";
 const columns: DataTableColumn<IProduct>[] = [
     {
         key: "img",
-        label: "",
+        label: "Imagen",
         render: (row) => (
             <img
                 src={row.images[0]}
                 alt={row.title}
-                className="w-16 h-16 object-cover rounded"
+                className="w-16 h-16 object-contain rounded"
             />
         ),
     },
