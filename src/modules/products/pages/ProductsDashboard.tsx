@@ -43,7 +43,9 @@ const columns: DataTableColumn<IProduct>[] = [
                 label = "Poco stock";
             }
             return (
-                <span className={`px-2 py-1 rounded text-xs font-semibold ${color}`}>
+                <span
+                    className={`px-2 py-1 rounded text-xs font-semibold ${color}`}
+                >
                     {stock} <span className="ml-1">({label})</span>
                 </span>
             );
@@ -118,7 +120,7 @@ export default function ProductsDashboard() {
             const timer = setTimeout(() => {
                 setSuccessMessage("");
             }, 3000);
-            
+
             return () => clearTimeout(timer); // limpia el timeout si el componente se desmonta
         }
     }, [successMessage]);
@@ -213,7 +215,6 @@ export default function ProductsDashboard() {
                 </div>
             </div>
 
-            
             <div className="bg-white rounded-lg shadow overflow-hidden">
                 <DataTable<IProduct>
                     data={productsOwner}

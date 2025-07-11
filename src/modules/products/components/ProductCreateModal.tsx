@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { IProduct } from "../models/IProduct";
 import { getCategoryList } from "../services/productService";
 import clsx from "clsx";
+import { IDimensions } from "../models/IDimensions";
 
 interface ProductCreateModalProps {
     open: boolean;
@@ -29,6 +30,7 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
         availabilityStatus: "disponible",
         images: [],
         thumbnail: "",
+        minimumOrderQuantity: 1,
     });
     const [categories, setCategories] = useState<string[]>([]);
     const [applyDiscount, setApplyDiscount] = useState(false);
@@ -62,6 +64,15 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
 
     const updateProduct = (field: keyof IProduct, value: any) => {
         setProduct((prev) => ({ ...prev, [field]: value }));
+    };
+    const updateDimension = (field: keyof IDimensions, value: number) => {
+        setProduct((prev) => ({
+            ...prev,
+            dimensions: {
+                ...prev.dimensions,
+                [field]: value,
+            },
+        }));
     };
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -268,8 +279,16 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
                                 type="number"
                                 min={1}
                                 max={100}
-                                value={discount}
-                                onChange={(e) => setDiscount(e.target.value)}
+                                value={product.discountPercentage ?? ""}
+                                onChange={(e) =>
+                                    setProduct((prev) => ({
+                                        ...prev,
+                                        discountPercentage:
+                                            e.target.value === ""
+                                                ? undefined
+                                                : Number(e.target.value),
+                                    }))
+                                }
                                 placeholder="Porcentaje de descuento"
                                 className="w-full border border-gray-300 rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
                             />
@@ -373,7 +392,7 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
                         </label>
                     </div>
                     {showDetails && (
-                        <div className="space-y-2 border border-gray-200 rounded-md p-3 mt-2 bg-gray-50">
+                        <div className="space-y-2 border border-gray-200 rounded-xl p-3 mt-2 bg-gray-50">
                             <div>
                                 <label className="block text-gray-700 font-medium mb-1 text-xs">
                                     Peso (kg)
@@ -395,18 +414,12 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
                                     </label>
                                     <input
                                         type="number"
-                                        value={dimensions.width}
+                                        value={product.dimensions?.width || ""}
                                         onChange={(e) =>
-                                            setDimensions((d) => ({
-                                                ...d,
-                                                width: e.target.value,
-                                            }))
-                                        }
-                                        onBlur={() =>
-                                            updateProduct("dimensions", {
-                                                ...dimensions,
-                                                width: dimensions.width,
-                                            })
+                                            updateDimension(
+                                                "width",
+                                                Number(e.target.value)
+                                            )
                                         }
                                         className="w-full border border-gray-300 rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
                                         min={0}
@@ -418,18 +431,12 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
                                     </label>
                                     <input
                                         type="number"
-                                        value={dimensions.height}
+                                        value={product.dimensions?.height || ""}
                                         onChange={(e) =>
-                                            setDimensions((d) => ({
-                                                ...d,
-                                                height: e.target.value,
-                                            }))
-                                        }
-                                        onBlur={() =>
-                                            updateProduct("dimensions", {
-                                                ...dimensions,
-                                                height: dimensions.height,
-                                            })
+                                            updateDimension(
+                                                "height",
+                                                Number(e.target.value)
+                                            )
                                         }
                                         className="w-full border border-gray-300 rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
                                         min={0}
@@ -441,18 +448,12 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
                                     </label>
                                     <input
                                         type="number"
-                                        value={dimensions.depth}
+                                        value={product.dimensions?.depth || ""}
                                         onChange={(e) =>
-                                            setDimensions((d) => ({
-                                                ...d,
-                                                depth: e.target.value,
-                                            }))
-                                        }
-                                        onBlur={() =>
-                                            updateProduct("dimensions", {
-                                                ...dimensions,
-                                                depth: dimensions.depth,
-                                            })
+                                            updateDimension(
+                                                "depth",
+                                                Number(e.target.value)
+                                            )
                                         }
                                         className="w-full border border-gray-300 rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
                                         min={0}
@@ -501,7 +502,7 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
                                     onChange={(e) =>
                                         updateProduct(
                                             "minimumOrderQuantity",
-                                            e.target.value
+                                            Number(e.target.value)
                                         )
                                     }
                                     className="w-full border border-gray-300 rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
