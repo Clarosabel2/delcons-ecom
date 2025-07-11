@@ -26,6 +26,17 @@ import { IProduct } from "../models/IProduct";
 import LoadingSpinner from "../../shared/components/LoadingSpinner";
 
 const columns: DataTableColumn<IProduct>[] = [
+    {
+        key: "img",
+        label: "",
+        render: (row) => (
+            <img
+                src={row.images[0]}
+                alt={row.title}
+                className="w-16 h-16 object-cover rounded"
+            />
+        ),
+    },
     { key: "title", label: "Nombre" },
     { key: "price", label: "Precio", render: (row) => `$${row.price}` },
     {
