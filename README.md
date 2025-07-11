@@ -1,7 +1,12 @@
 # Delcons E-commerce  
   
-Una plataforma de comercio electrónico construida con React, TypeScript y Firebase que permite a los vendedores gestionar sus productos y a los clientes realizar compras de manera intuitiva.
-![Logo](./public/logo_large.png)
+Una plataforma de comercio electrónico construida con React, TypeScript y Firebase que permite a los vendedores gestionar sus productos y 
+a los clientes realizar compras de manera intuitiva.
+
+
+<p align="center">
+  <img src="./public/logo_large.png" alt="Logo" style="background:white; padding:10px; border-radius:10px;" width="200"/>
+</p>
 
 
 ## Tech Stack  
