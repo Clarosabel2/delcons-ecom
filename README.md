@@ -1,12 +1,40 @@
-# React + Vite
+# Delcons E-commerce  
+  
+Una plataforma de comercio electrónico construida con React, TypeScript y Firebase que permite a los vendedores gestionar sus productos y a los clientes realizar compras de manera intuitiva.
+![Logo](./logo_large.png)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+## Tech Stack  
+  
+**Client:** React, TypeScript, TailwindCSS  
+  
+**Server:** Firebase  
+- **Autenticación:** Firebase Auth para registro, login y gestión de sesiones  
+- **Base de Datos:** Firebase Firestore para almacenamiento de productos y usuarios    
+- **Configuración:** Variables de entorno para configuración segura  
+  
+**Servicios Adicionales:**  
+- **APIs Externas:** DummyJSON para catálogo de productos  
+- **Herramienta de Build:** Vite 7.0.0  
+- **Deployment:** Vercel
+## Environment Variables  
+  
+Para ejecutar este proyecto, necesitarás agregar las siguientes variables de entorno a tu archivo .env  
+  
+`VITE_FIREBASE_API_KEY`  
+  
+`VITE_FIREBASE_AUTH_DOMAIN`  
+  
+`VITE_FIREBASE_PROJECT_ID`  
+  
+`VITE_FIREBASE_STORAGE_BUCKET`  
+  
+`VITE_FIREBASE_MESSAGING_SENDER_ID`  
+  
+`VITE_FIREBASE_APP_ID`
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Demo
 
-## Expanding the ESLint configuration
+https://delcons-ecom.vercel.app/
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
