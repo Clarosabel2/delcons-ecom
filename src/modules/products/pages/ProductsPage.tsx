@@ -58,7 +58,7 @@ export default function ProductsPage() {
                     <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 rounded-full bg-blue-50/50 pointer-events-none" />
 
                     <div className="flex items-center justify-center sm:justify-start gap-3 relative z-10 shrink-0">
-                        <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-md shadow-blue-500/20 shrink-0">
+                        <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-md shadow-blue-500/20 shrink-0 overflow-hidden">
                             <img src="/casa_borda_logo.png" alt="" className="object-contain" />
                         </div>
                         <div>

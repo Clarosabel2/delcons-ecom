@@ -4,6 +4,7 @@ import Logo from "./Logo";
 import { useAuth } from "../../auth/hooks/useAuth";
 import LinkAnimated from "./LinkAnimated";
 import UserButton from "../../user/components/UserButton";
+import UserButtonPhone from "../../user/components/UserButtonPhone";
 import { useLocation, useNavigate } from "react-router";
 import clsx from "clsx";
 
@@ -67,7 +68,12 @@ export default function Header() {
                                         </LinkAnimated>
                                     </div>
                                 ) : (
-                                    <UserButton />
+                                    <>
+                                        <div className="hidden md:block">
+                                            <UserButton />
+                                        </div>
+                                        <UserButtonPhone />
+                                    </>
                                 )}
                             </div>
                         </div>
