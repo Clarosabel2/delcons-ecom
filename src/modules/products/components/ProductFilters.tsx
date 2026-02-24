@@ -15,6 +15,17 @@ export default function ProductFilters({
 }: Props) {
     const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
     const [showMobile, setShowMobile] = useState(false);
+    const [isAtBottom, setIsAtBottom] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            // Se oculta el botón si estamos a menos de 100px del fondo de la página
+            const bottom = Math.ceil(window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 100;
+            setIsAtBottom(bottom);
+        };
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -49,13 +60,13 @@ export default function ProductFilters({
         <div className="relative">
             {/* Desktop Panel */}
             <div className="hidden lg:block sticky top-24 z-30">
-                <div className="bg-white/80 backdrop-blur-xl border border-gray-100 shadow-xl shadow-gray-200/50 rounded-2xl p-6 transition-all duration-300">
-                    <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
-                        <div className="flex items-center gap-3">
-                            <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
-                                <Filter className="w-5 h-5" />
+                <div className="bg-white/80 backdrop-blur-xl border border-gray-100 shadow-xl shadow-gray-200/50 rounded-xl p-4 transition-all duration-300">
+                    <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+                        <div className="flex items-center gap-2">
+                            <div className="p-1.5 bg-blue-50 text-blue-600 rounded-md">
+                                <Filter className="w-4 h-4" />
                             </div>
-                            <h2 className="text-xl font-bold text-gray-900 tracking-tight">Filtros</h2>
+                            <h2 className="text-lg font-bold text-gray-900 tracking-tight">Filtros</h2>
                         </div>
                         {categoriesSelected.length > 0 && (
                             <span className="text-xs font-bold bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
@@ -78,7 +89,10 @@ export default function ProductFilters({
             <div className="lg:hidden">
                 {/* Floating Button */}
                 <button
-                    className="fixed flex items-center justify-center gap-2 px-6 py-4 text-white font-medium tracking-wide transition-all duration-300 rounded-full shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 bottom-6 right-6 bg-blue-600 hover:bg-blue-700 hover:scale-105 active:scale-95 z-40"
+                    className={clsx(
+                        "fixed flex items-center justify-center gap-2 px-6 py-4 text-white font-medium tracking-wide transition-all duration-300 rounded-full shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 bottom-28 right-6 bg-blue-600 hover:bg-blue-700 z-40",
+                        isAtBottom ? "translate-y-20 opacity-0 pointer-events-none" : "translate-y-0 opacity-100 hover:scale-105 active:scale-95"
+                    )}
                     onClick={() => setShowMobile(true)}
                     style={{ transform: "translateZ(0)" }}
                 >
@@ -169,10 +183,10 @@ function FilterContent({
     };
 
     return (
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-5">
             {/* Categorías */}
-            <div className="space-y-4">
-                <h3 className="text-sm font-bold tracking-wider text-gray-400 uppercase">
+            <div className="space-y-3">
+                <h3 className="text-xs font-bold tracking-wider text-gray-400 uppercase">
                     Categorías
                 </h3>
                 <div className="flex flex-col gap-1">
@@ -231,12 +245,12 @@ function FilterContent({
             <div className="h-px bg-gray-100 w-full" />
 
             {/* Rango de Precio */}
-            <div className="space-y-4">
-                <h3 className="text-sm font-bold tracking-wider text-gray-400 uppercase">
+            <div className="space-y-3">
+                <h3 className="text-xs font-bold tracking-wider text-gray-400 uppercase">
                     Rango de Precio
                 </h3>
-                <div className="space-y-6">
-                    <div className="flex items-center gap-4">
+                <div className="space-y-4">
+                    <div className="flex items-center gap-2">
                         <div className="flex-1">
                             <label className="text-xs text-gray-500 mb-1.5 block font-medium">Mínimo</label>
                             <div className="relative">
@@ -250,7 +264,7 @@ function FilterContent({
                                             priceRange[1],
                                         ])
                                     }
-                                    className="w-full pl-7 pr-3 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-800 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all shadow-sm"
+                                    className="w-full pl-6 pr-2 py-1.5 bg-white border border-gray-200 rounded-md text-sm font-medium text-gray-800 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all shadow-sm"
                                 />
                             </div>
                         </div>
@@ -267,7 +281,7 @@ function FilterContent({
                                             Math.max(parseInt(e.target.value) || 0, priceRange[0]),
                                         ])
                                     }
-                                    className="w-full pl-7 pr-3 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-800 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all shadow-sm"
+                                    className="w-full pl-6 pr-2 py-1.5 bg-white border border-gray-200 rounded-md text-sm font-medium text-gray-800 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all shadow-sm"
                                 />
                             </div>
                         </div>
@@ -278,8 +292,8 @@ function FilterContent({
             <div className="h-px bg-gray-100 w-full" />
 
             {/* Valoración */}
-            <div className="space-y-4">
-                <h3 className="text-sm font-bold tracking-wider text-gray-400 uppercase">
+            <div className="space-y-3">
+                <h3 className="text-xs font-bold tracking-wider text-gray-400 uppercase">
                     Valoración
                 </h3>
                 <div className="space-y-1">
@@ -317,7 +331,7 @@ function FilterContent({
             </div>
 
             {/* Botones */}
-            <div className="flex flex-col gap-3 pt-6 mt-2 border-t border-gray-100">
+            <div className="flex flex-col gap-2 pt-4 mt-1 border-t border-gray-100">
                 <button className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg shadow-[0_4px_14px_0_rgb(37,99,235,0.39)] hover:shadow-[0_6px_20px_rgba(37,99,235,0.23)] hover:-translate-y-0.5 transition-all outline-none focus:ring-2 focus:ring-blue-500/50">
                     Aplicar Filtros
                 </button>

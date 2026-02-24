@@ -57,7 +57,23 @@ export default function ProductDetailPage() {
             )}
 
             {!loading && product && (
-                <div className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+                <div className="pt-5 px-2 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col gap-6">
+                    {/* Compact Business Header */}
+                    <header className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm overflow-hidden flex items-center justify-between gap-4 relative">
+                        <div className="absolute top-0 right-0 -mr-8 -mt-6 w-24 h-24 rounded-full bg-blue-50/50 pointer-events-none" />
+                        <div className="flex items-center gap-3 relative z-10">
+                            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-white shadow-sm border border-gray-100 shrink-0">
+                                <img src="/casa_borda_logo.png" alt="Logo" className="object-contain w-8 h-8" />
+                            </div>
+                            <div>
+                                <h1 className="text-xl font-extrabold text-gray-900 tracking-tight leading-none mb-1 line-clamp-1">
+                                    Corralón "Casa Borda"
+                                </h1>
+                                <p className="text-xs text-blue-600 font-semibold tracking-wide uppercase">Catálogo Electrónico</p>
+                            </div>
+                        </div>
+                    </header>
+
                     <ProductDetails
                         product={product}
                         quantity={quantity}
@@ -87,13 +103,13 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
     const [activeImage, setActiveImage] = useState(0);
 
     return (
-        <div className="flex flex-col gap-12">
+        <div className="flex flex-col gap-6 lg:gap-12">
             {/* Top Section: Images and Main Info */}
             <div className="bg-white rounded-[2rem] shadow-xl shadow-blue-900/5 border border-gray-100 overflow-hidden flex flex-col lg:flex-row">
 
                 {/* Images Section */}
-                <div className="p-6 lg:p-10 lg:w-1/2 border-b lg:border-b-0 lg:border-r border-gray-100 bg-gray-50/50">
-                    <div className="relative aspect-square rounded-2xl bg-white border border-gray-100 overflow-hidden flex items-center justify-center mb-6 shadow-sm group">
+                <div className="p-4 lg:p-10 lg:w-1/2 border-b lg:border-b-0 lg:border-r border-gray-100 bg-gray-50/50">
+                    <div className="relative h-[30vh] min-h-[200px] sm:h-auto sm:aspect-square rounded-2xl bg-white border border-gray-100 overflow-hidden flex items-center justify-center mb-4 lg:mb-6 shadow-sm group">
                         <img
                             src={product?.images[activeImage]}
                             alt={product?.title}
@@ -108,7 +124,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
 
                     {/* Thumbnails */}
                     {product?.images && product.images.length > 1 && (
-                        <div className="grid grid-cols-4 gap-4">
+                        <div className="grid grid-cols-4 gap-2 sm:gap-4">
                             {product.images.map((img, idx) => (
                                 <button
                                     key={idx}
@@ -132,23 +148,23 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
                 </div>
 
                 {/* Info Section */}
-                <div className="p-6 lg:p-12 lg:w-1/2 flex flex-col">
+                <div className="p-4 sm:p-6 lg:p-12 lg:w-1/2 flex flex-col">
                     {/* Header */}
-                    <div className="mb-6">
-                        <div className="flex items-center gap-2 mb-3">
-                            <span className="text-xs font-bold tracking-wider text-blue-600 uppercase bg-blue-50 px-3 py-1.5 rounded-md">
+                    <div className="mb-4 lg:mb-6">
+                        <div className="flex items-center gap-2 mb-2 lg:mb-3">
+                            <span className="text-[10px] lg:text-xs font-bold tracking-wider text-blue-600 uppercase bg-blue-50 px-2 lg:px-3 py-1 lg:py-1.5 rounded-md">
                                 {product?.category}
                             </span>
                             {product?.brand && (
-                                <span className="text-sm font-semibold text-gray-400 uppercase tracking-widest">
+                                <span className="text-xs lg:text-sm font-semibold text-gray-400 uppercase tracking-widest">
                                     • {product.brand}
                                 </span>
                             )}
                         </div>
-                        <h1 className="text-3xl lg:text-4xl font-extrabold text-gray-900 leading-tight mb-4">
+                        <h1 className="text-2xl lg:text-4xl font-extrabold text-gray-900 leading-tight mb-2 lg:mb-4 line-clamp-2">
                             {product?.title}
                         </h1>
-                        <div className="flex items-center flex-wrap gap-4 text-sm">
+                        <div className="flex items-center flex-wrap gap-2 lg:gap-4 text-xs lg:text-sm">
                             <div className="flex items-center gap-1.5 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100">
                                 <ProductRatingStar rate={product.rating ?? 0} className="text-amber-400" />
                                 <span className="font-medium text-gray-600 ml-1">{product.rating}</span>
@@ -162,21 +178,21 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
                         </div>
                     </div>
 
-                    <hr className="border-gray-100 mb-8" />
+                    <hr className="border-gray-100 mb-4 lg:mb-8 hidden lg:block" />
 
                     {/* Price and Add to Cart */}
-                    <div className="mb-8">
-                        <div className="flex items-end gap-3 mb-6">
-                            <span className="text-2xl font-bold text-gray-400 mb-1">$</span>
-                            <span className="text-5xl font-extrabold text-gray-900 tracking-tight">
+                    <div className="mb-4 lg:mb-8">
+                        <div className="flex items-end gap-2 lg:gap-3 mb-4 lg:mb-6">
+                            <span className="text-xl lg:text-2xl font-bold text-gray-400 mb-0.5 lg:mb-1">$</span>
+                            <span className="text-3xl lg:text-5xl font-extrabold text-gray-900 tracking-tight">
                                 {product?.price}
                             </span>
                         </div>
 
-                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-                            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-1.5 shrink-0 flex items-center justify-center">
+                        <div className="flex flex-row items-center gap-2 lg:gap-4">
+                            <div className="bg-gray-50 border border-gray-200 rounded-xl lg:rounded-2xl p-1 lg:p-1.5 shrink-0 flex items-center justify-center">
                                 <QuantitySelector
-                                    className="w-10 h-10 border-none bg-transparent"
+                                    className="w-8 h-8 lg:w-10 lg:h-10 border-none bg-transparent text-sm lg:text-base"
                                     value={quantity}
                                     onChange={onQuantityChange}
                                 />
@@ -184,7 +200,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
                             <button
                                 onClick={() => onAddToCart(new Item(quantity, product))}
                                 className={clsx(
-                                    "flex-1 flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300",
+                                    "flex-1 flex items-center justify-center gap-2 lg:gap-3 px-4 py-2.5 lg:px-8 lg:py-4 rounded-xl lg:rounded-2xl font-bold text-sm lg:text-lg transition-all duration-300",
                                     (product?.stock ?? 0) > 0
                                         ? "bg-gray-900 text-white hover:bg-blue-600 hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-1 active:scale-95"
                                         : "bg-gray-200 text-gray-500 cursor-not-allowed"
@@ -196,16 +212,16 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
                             </button>
                         </div>
                         {(product?.stock ?? 0) > 0 && (product?.stock ?? 0) <= 5 && (
-                            <p className="text-rose-500 text-sm font-medium mt-3 flex items-center gap-1.5">
-                                <Info className="w-4 h-4" /> ¡Solo quedan {product?.stock} disponibles!
+                            <p className="text-rose-500 text-xs lg:text-sm font-medium mt-2 flex items-center gap-1.5">
+                                <Info className="w-3.5 h-3.5" /> ¡Solo quedan {product?.stock} disponibles!
                             </p>
                         )}
                     </div>
 
-                    <hr className="border-gray-100 mb-8" />
+                    <hr className="border-gray-100 mb-4 lg:mb-8" />
 
                     {/* Features Grid */}
-                    <div className="grid grid-cols-2 gap-4 mt-auto">
+                    <div className="grid grid-cols-2 gap-2 lg:gap-4 mt-auto">
                         <FeatureItem
                             icon={<PackageCheck className="w-5 h-5 text-blue-500" />}
                             title="Estado"

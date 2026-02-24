@@ -4,7 +4,7 @@ export interface StatCardItem {
   label: string;
   value: string | number;
   icon?: React.ReactNode;
-  color?: string; // tailwind color, ej: 'text-blue-600'
+  color?: string;
 }
 
 interface StatsCardsProps {

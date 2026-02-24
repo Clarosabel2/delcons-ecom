@@ -22,11 +22,11 @@ export default function ProductCard({ product }: ProductCardProps) {
 
     return (
         <div
-            className="group relative flex flex-col bg-white border border-gray-100 rounded-[2rem] overflow-hidden cursor-pointer transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/10 hover:-translate-y-1"
+            className="group relative flex flex-col bg-white border border-gray-100 rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/10 hover:-translate-y-1"
             onClick={handleClick}
         >
             {/* Image Container */}
-            <div className="relative h-56 w-full bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden flex items-center justify-center p-6">
+            <div className="relative h-40 w-full bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden flex items-center justify-center p-4">
                 <img
                     src={product.images[0]}
                     alt={product.title}
@@ -45,7 +45,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             </div>
 
             {/* Content Container */}
-            <div className="flex flex-col flex-1 p-6 relative">
+            <div className="flex flex-col flex-1 p-4 relative">
                 {/* Brand & Category */}
                 <div className="flex items-center justify-between gap-2 mb-3">
                     <span className="text-[11px] font-bold tracking-wider text-blue-600 uppercase bg-blue-50 px-2.5 py-1 rounded-md">
@@ -59,7 +59,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-base font-bold text-gray-800 leading-snug mb-2 line-clamp-2 min-h-[2.75rem] group-hover:text-blue-600 transition-colors duration-300">
+                <h3 className="text-sm font-bold text-gray-800 leading-snug mb-2 line-clamp-2 min-h-[2.5rem] group-hover:text-blue-600 transition-colors duration-300">
                     {product.title}
                 </h3>
 
@@ -83,9 +83,9 @@ export default function ProductCard({ product }: ProductCardProps) {
                 <div className="mt-auto pt-4 border-t border-gray-50 flex items-end justify-between">
                     {/* Price & Stock */}
                     <div className="flex flex-col gap-1">
-                        <div className="flex items-baseline gap-1">
-                            <span className="text-xs font-bold text-gray-400 align-top mt-1">$</span>
-                            <span className="text-2xl font-extrabold text-gray-900 tracking-tight">
+                        <div className="flex items-baseline gap-0.5">
+                            <span className="text-[10px] font-bold text-gray-400 align-top mt-1">$</span>
+                            <span className="text-lg font-extrabold text-gray-900 tracking-tight">
                                 {product.price}
                             </span>
                         </div>
@@ -111,7 +111,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                     {/* Add to Cart Button */}
                     <button
                         className={clsx(
-                            "relative w-12 h-12 flex items-center justify-center rounded-2xl transition-all duration-300 transform outline-none",
+                            "relative w-10 h-10 flex items-center justify-center rounded-xl transition-all duration-300 transform outline-none",
                             (product.stock ?? 0) === 0 || existingItem?.quantity === product.stock
                                 ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                                 : "bg-gray-900 text-white hover:bg-blue-600 hover:shadow-lg hover:shadow-blue-500/40 hover:-translate-y-1 active:scale-95 active:shadow-sm"
