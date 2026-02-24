@@ -1,13 +1,4 @@
 import React from "react";
-import {
-    FiSearch,
-    FiPlus,
-    FiFilter,
-    FiEdit,
-    FiTrash2,
-    FiEye,
-    FiMoreVertical,
-} from "react-icons/fi";
 import Header from "../../components/Header";
 import { useLocation } from "react-router";
 import { Outlet } from "react-router";
@@ -28,24 +19,24 @@ export default function DashboardLayout() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-slate-50/50">
             {/* Header */}
             <Header />
-            <div className="bg-white shadow-sm border-b border-gray-200">
-                <div className="px-6 py-4">
+            <div className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-gray-100 sticky top-16 z-20">
+                <div className="px-6 py-5 max-w-7xl mx-auto">
                     <div className="flex items-center justify-between">
                         <div>
-                            <h1 className="text-2xl font-bold text-gray-900">
+                            <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
                                 {titulo}
                             </h1>
-                            <p className="text-sm text-gray-500">
+                            <p className="text-sm font-medium text-gray-500 mt-1">
                                 {subtitulo}
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
-            <div className="px-6 py-6">
+            <div className="px-6 py-8 max-w-7xl mx-auto">
                 <Outlet />
             </div>
         </div>

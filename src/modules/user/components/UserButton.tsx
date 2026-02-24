@@ -1,8 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../../auth/hooks/useAuth";
-import { VscAccount } from "react-icons/vsc";
-import { CiLogout, CiSettings, CiViewList } from "react-icons/ci";
-import { TfiPackage } from "react-icons/tfi";
+import { User, Settings, Package, LogOut, ClipboardList } from "lucide-react";
 
 export default function UserButton() {
     const { user, logout } = useAuth();
@@ -28,77 +26,94 @@ export default function UserButton() {
         <div className="relative" ref={dropdownRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center justify-center w-11 h-11 rounded-full border-2 border-gray-200 shadow-md bg-white hover:shadow-lg transition-all focus:outline-none focus:ring-1 focus:ring-[#1b6d87]"
+                className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-gray-200 shadow-sm bg-white hover:ring-2 hover:ring-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all z-50 relative"
                 aria-label="Abrir menú de usuario"
+                aria-expanded={isOpen}
             >
                 <img
                     src={user?.photoImage || "/default-avatar.png"}
-                    alt={user?.username}
-                    className="w-9 h-9 rounded-full object-cover border border-gray-300"
+                    alt={user?.username || "Usuario"}
+                    className="w-full h-full rounded-full object-cover"
                 />
             </button>
 
-            {/* Menú flotante */}
+            {/* Menú flotante estilo Clerk */}
             <div
-                className={`absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 z-50 transition-all duration-200 origin-top-right
+                className={`absolute right-0 mt-2 w-[300px] bg-white rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-100 z-40 transition-all duration-200 origin-top-right overflow-hidden
                 ${isOpen ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto' : 'opacity-0 scale-95 -translate-y-2 pointer-events-none'}`}
-                style={{ minWidth: '15rem' }}
             >
-                <div className="flex flex-col items-center py-5 border-b border-gray-100">
+                {/* Cabecera / Info del usuario */}
+                <div className="flex items-center gap-3 p-4 border-b border-gray-100">
                     <img
                         src={user?.photoImage || "/default-avatar.png"}
-                        alt={user?.username}
-                        className="w-14 h-14 rounded-full object-cover border-2 border-primary-500 shadow"
+                        alt={user?.username || "Usuario"}
+                        className="w-11 h-11 rounded-full object-cover border border-gray-200"
                     />
-                    <span className="mt-2 font-semibold text-gray-800 text-base">
-                        {user?.firstName || user?.username}
-                    </span>
-                    <span className="text-xs text-gray-400">{user?.email}</span>
+                    <div className="flex flex-col justify-center overflow-hidden">
+                        <span className="font-semibold text-gray-900 text-sm truncate w-full">
+                            {user?.firstName && user?.lastName
+                                ? `${user.firstName} ${user.lastName}`
+                                : user?.username || "Usuario"}
+                        </span>
+                        <span className="text-xs text-gray-500 truncate w-full">
+                            {user?.email || "correo@ejemplo.com"}
+                        </span>
+                    </div>
                 </div>
-                <ul className="py-2 text-gray-700 w-full">
-                    <li>
-                        <a
-                            href="/account"
-                            className="flex gap-3 items-center px-5 py-3 hover:bg-gray-50 transition-colors text-base font-medium"
-                        >
-                            <VscAccount className="text-xl text-primary-500" />
-                            Mi cuenta
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href="/settings"
-                            className="flex gap-3 items-center px-5 py-3 hover:bg-gray-50 transition-colors text-base font-medium"
-                        >
-                            <CiSettings className="text-xl text-primary-500" />
-                            Configuración
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href="/orders"
-                            className="flex gap-3 items-center px-5 py-3 hover:bg-gray-50 transition-colors text-base font-medium"
-                        >
-                            <CiViewList className="text-xl text-primary-500" />
-                            Mis pedidos
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href="dashboard/my-products"
-                            className="flex gap-3 items-center px-5 py-3 hover:bg-gray-50 transition-colors text-base font-medium"
-                        >
-                            <TfiPackage className="text-xl text-primary-500" />
-                            Mis productos
-                        </a>
-                    </li>
-                </ul>
-                <div className="border-t border-gray-100">
+
+                {/* Opciones principales */}
+                <div className="p-2">
+                    <ul className="flex flex-col text-gray-700 w-full space-y-0.5">
+                        <li>
+                            <a
+                                href="/account"
+                                className="group flex gap-3 items-center px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-colors text-sm font-medium text-gray-700"
+                            >
+                                <User className="w-4 h-4 text-gray-500 group-hover:text-blue-600 transition-colors" />
+                                Gestionar cuenta
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                href="/orders"
+                                className="group flex gap-3 items-center px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-colors text-sm font-medium text-gray-700"
+                            >
+                                <ClipboardList className="w-4 h-4 text-gray-500 group-hover:text-blue-600 transition-colors" />
+                                Mis pedidos
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                href="/dashboard/my-products"
+                                className="group flex gap-3 items-center px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-colors text-sm font-medium text-gray-700"
+                            >
+                                <Package className="w-4 h-4 text-gray-500 group-hover:text-blue-600 transition-colors" />
+                                Mis productos
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                href="/settings"
+                                className="group flex gap-3 items-center px-3 py-2.5 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-colors text-sm font-medium text-gray-700"
+                            >
+                                <Settings className="w-4 h-4 text-gray-500 group-hover:text-blue-600 transition-colors" />
+                                Configuración
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                {/* Footer del menú */}
+                <div className="p-2 border-t border-gray-100">
                     <button
-                        onClick={logout}
-                        className="w-full flex items-center gap-3 px-5 py-3 text-base font-semibold text-red-600 hover:bg-red-50 transition-colors focus:outline-none"
+                        onClick={() => {
+                            setIsOpen(false);
+                            if (logout) logout();
+                        }}
+                        className="group w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-rose-50 hover:text-rose-600 transition-colors focus:outline-none focus:ring-2 focus:ring-rose-200"
                     >
-                        <CiLogout className="text-xl" /> Cerrar sesión
+                        <LogOut className="w-4 h-4 text-gray-500 group-hover:text-rose-500 transition-colors" />
+                        Cerrar sesión
                     </button>
                 </div>
             </div>

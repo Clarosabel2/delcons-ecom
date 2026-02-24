@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import {
-    FiSearch,
-    FiPlus,
-    FiFilter,
-    FiEdit,
-    FiTrash2,
-    FiEye,
-    FiShoppingBag,
-    FiDollarSign,
-    FiUsers,
-} from "react-icons/fi";
+    Search,
+    Plus,
+    Filter,
+    Edit2,
+    Trash2,
+    Eye,
+    ShoppingBag,
+    DollarSign,
+    Users,
+} from "lucide-react";
 import StatsCards, { StatCardItem } from "../../shared/components/StatsCards";
 import DataTable, {
     DataTableAction,
@@ -44,20 +44,20 @@ const columns: DataTableColumn<IProduct>[] = [
         label: "Stock",
         render: (row) => {
             const stock = row.stock ?? 0;
-            let color = "bg-green-100 text-green-800";
-            let label = "Stock suficiente";
+            let color = "bg-green-50 text-green-700 ring-1 ring-green-600/20";
+            let label = "Stock";
             if (stock === 0) {
-                color = "bg-red-100 text-red-800";
+                color = "bg-rose-50 text-rose-700 ring-1 ring-rose-600/20";
                 label = "Sin stock";
             } else if (stock > 0 && stock <= 10) {
-                color = "bg-yellow-100 text-yellow-800";
+                color = "bg-amber-50 text-amber-700 ring-1 ring-amber-600/20";
                 label = "Poco stock";
             }
             return (
                 <span
-                    className={`px-2 py-1 rounded text-xs font-semibold ${color}`}
+                    className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-semibold ${color}`}
                 >
-                    {stock} <span className="ml-1">({label})</span>
+                    {stock} <span className="ml-1 hidden sm:inline-block">({label})</span>
                 </span>
             );
         },
@@ -76,12 +76,12 @@ export default function ProductsDashboard() {
     const actions: DataTableAction<IProduct>[] = [
         {
             label: "Ver",
-            icon: <FiEye />,
+            icon: <Eye className="w-4 h-4" />,
             onClick: (row) => alert(`Ver ${row.title}`),
         },
         {
             label: "Editar",
-            icon: <FiEdit />,
+            icon: <Edit2 className="w-4 h-4" />,
             onClick: (row) => {
                 setModalOpen(true);
                 setProductToEdit(row);
@@ -89,7 +89,7 @@ export default function ProductsDashboard() {
         },
         {
             label: "Eliminar",
-            icon: <FiTrash2 />,
+            icon: <Trash2 className="w-4 h-4" />,
             onClick: async (row) => {
                 if (!row.id)
                     return alert("Producto sin ID, no se puede eliminar.");
@@ -106,7 +106,7 @@ export default function ProductsDashboard() {
                     console.error(error);
                 }
             },
-            className: "text-red-600 hover:text-red-900 hover:bg-red-50",
+            className: "text-rose-600 hover:text-rose-700 hover:bg-rose-50",
         },
     ];
 
@@ -140,20 +140,20 @@ export default function ProductsDashboard() {
         {
             label: "Productos",
             value: 120,
-            icon: <FiShoppingBag />,
+            icon: <ShoppingBag className="w-6 h-6" />,
             color: "text-blue-600",
         },
         {
             label: "Ventas",
             value: "$5,000",
-            icon: <FiDollarSign />,
-            color: "text-green-600",
+            icon: <DollarSign className="w-6 h-6" />,
+            color: "text-emerald-600",
         },
         {
             label: "Clientes",
             value: 80,
-            icon: <FiUsers />,
-            color: "text-purple-600",
+            icon: <Users className="w-6 h-6" />,
+            color: "text-indigo-600",
         },
     ];
 
@@ -163,107 +163,116 @@ export default function ProductsDashboard() {
     return (
         <>
             {successMessage && (
-                <div className="fixed top-6 right-6 z-50 bg-green-500 text-white px-6 py-3 rounded shadow-lg animate-fade-in-modal text-sm">
+                <div className="fixed top-24 right-6 z-50 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl shadow-lg shadow-green-900/10 animate-fade-in-modal text-sm font-medium flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-green-500"></div>
                     {successMessage}
                 </div>
             )}
+
             {/* Stats Cards */}
+            <div className="mb-6">
+                <StatsCards stats={stats} />
+            </div>
 
-            <StatsCards stats={stats} />
+            {/* Panel Principal */}
+            <div className="bg-white/80 backdrop-blur-xl border border-gray-100 shadow-xl shadow-gray-200/40 rounded-3xl overflow-hidden transition-all duration-300">
 
-            {/* Filtros visuales */}
-            <div className="bg-white border-b border-gray-200 px-6 py-4">
-                <div className="flex items-center space-x-4">
-                    <div className="flex-1 max-w-lg">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Estado
-                        </label>
-                        <select className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                            <option>Todos los estados</option>
-                        </select>
+                {/* Filtros visuales */}
+                <div className="px-6 py-5 border-b border-gray-100 bg-gray-50/50">
+                    <div className="flex flex-col sm:flex-row items-end gap-4">
+                        <div className="w-full sm:flex-1">
+                            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                                Estado
+                            </label>
+                            <select className="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-medium text-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all shadow-sm">
+                                <option>Todos los estados</option>
+                            </select>
+                        </div>
+                        <div className="w-full sm:flex-1">
+                            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">
+                                Fecha
+                            </label>
+                            <input
+                                type="date"
+                                className="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-medium text-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all shadow-sm"
+                            />
+                        </div>
+                        <div className="w-full sm:w-auto">
+                            <button className="w-full sm:w-auto px-5 py-2.5 bg-white border border-gray-200 text-gray-700 text-sm font-bold rounded-xl hover:bg-gray-50 focus:ring-4 focus:ring-gray-200/50 transition-all shadow-sm">
+                                Limpiar
+                            </button>
+                        </div>
                     </div>
-                    <div className="flex-1 max-w-lg">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Fecha
-                        </label>
-                        <input
-                            type="date"
-                            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                        />
+                </div>
+
+                {/* Search and Actions */}
+                <div className="px-6 py-5 flex flex-col md:flex-row items-center justify-between gap-4 border-b border-gray-100">
+                    <div className="w-full md:flex-1 max-w-lg">
+                        <div className="relative group">
+                            <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-blue-500 h-5 w-5 transition-colors" />
+                            <input
+                                type="text"
+                                placeholder="Buscar productos..."
+                                className="w-full pl-11 pr-4 py-2.5 bg-gray-50/50 border border-gray-200 rounded-xl text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all"
+                            />
+                        </div>
                     </div>
-                    <div className="flex items-end mt-6">
-                        <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
-                            Limpiar
+                    <div className="flex items-center gap-3 w-full md:w-auto">
+                        <button className="flex-1 md:flex-none inline-flex items-center justify-center px-4 py-2.5 border border-gray-200 rounded-xl text-sm font-bold text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-4 focus:ring-gray-200/50 transition-all shadow-sm hover:shadow-md">
+                            <Filter className="h-4 w-4 mr-2 text-gray-500" />
+                            Filtros
+                        </button>
+                        <button
+                            onClick={() => setModalOpen(true)}
+                            className="flex-1 md:flex-none inline-flex items-center justify-center px-5 py-2.5 border border-transparent rounded-xl text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all shadow-[0_4px_14px_0_rgb(37,99,235,0.39)] hover:shadow-[0_6px_20px_rgba(37,99,235,0.23)] hover:-translate-y-0.5"
+                        >
+                            <Plus className="h-4 w-4 mr-2" strokeWidth={3} />
+                            Agregar Producto
                         </button>
                     </div>
                 </div>
-            </div>
 
-            {/* Search and Actions */}
-            <div className="py-6 flex items-center justify-between">
-                <div className="flex-1 max-w-lg">
-                    <div className="relative">
-                        <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-                        <input
-                            type="text"
-                            placeholder="Buscar..."
-                            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors"
-                        />
+                {/* Tabla */}
+                <div className="w-full overflow-x-auto">
+                    <DataTable<IProduct>
+                        data={productsOwner}
+                        columns={columns}
+                        actions={actions}
+                        selectable
+                    />
+                </div>
+
+                {/* Pagination */}
+                <div className="bg-gray-50/50 px-6 py-4 flex flex-col sm:flex-row items-center justify-between border-t border-gray-100 gap-4">
+                    <div className="flex-1 flex justify-between sm:hidden w-full">
+                        <button className="relative inline-flex items-center px-4 py-2 border border-gray-200 text-sm font-medium rounded-xl text-gray-700 bg-white hover:bg-gray-50 transition-all shadow-sm">
+                            Anterior
+                        </button>
+                        <button className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-200 text-sm font-medium rounded-xl text-gray-700 bg-white hover:bg-gray-50 transition-all shadow-sm">
+                            Siguiente
+                        </button>
                     </div>
-                </div>
-                <div className="flex items-center space-x-3">
-                    <button className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
-                        <FiFilter className="h-4 w-4 mr-2" />
-                        Filtros
-                    </button>
-                    <button
-                        onClick={() => setModalOpen(true)}
-                        className="inline-flex items-center px-4 py-2 border border-transparent rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
-                    >
-                        <FiPlus className="h-4 w-4 mr-2" />
-                        Agregar
-                    </button>
-                </div>
-            </div>
-
-            <div className="bg-white rounded-lg shadow overflow-hidden">
-                <DataTable<IProduct>
-                    data={productsOwner}
-                    columns={columns}
-                    actions={actions}
-                    selectable
-                />
-            </div>
-
-            <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6 mt-4 rounded-lg">
-                <div className="flex-1 flex justify-between sm:hidden">
-                    <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors">
-                        Anterior
-                    </button>
-                    <button className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors">
-                        Siguiente
-                    </button>
-                </div>
-                <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                    <div>
-                        <p className="text-sm text-gray-700">
-                            Mostrando <span className="font-medium">1</span> a{" "}
-                            <span className="font-medium">10</span> de{" "}
-                            <span className="font-medium">10</span> resultados
-                        </p>
-                    </div>
-                    <div>
-                        <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
-                            <button className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">
-                                Anterior
-                            </button>
-                            <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
-                                1
-                            </button>
-                            <button className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">
-                                Siguiente
-                            </button>
-                        </nav>
+                    <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between w-full">
+                        <div>
+                            <p className="text-sm text-gray-500 font-medium">
+                                Mostrando <span className="font-bold text-gray-900">1</span> a{" "}
+                                <span className="font-bold text-gray-900">10</span> de{" "}
+                                <span className="font-bold text-gray-900">10</span> resultados
+                            </p>
+                        </div>
+                        <div>
+                            <nav className="relative z-0 inline-flex rounded-xl shadow-sm -space-x-px bg-white border border-gray-200 overflow-hidden">
+                                <button className="relative inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors border-r border-gray-200">
+                                    Anterior
+                                </button>
+                                <button className="relative inline-flex items-center px-4 py-2 bg-blue-50 text-sm font-bold text-blue-700 hover:bg-blue-100 transition-colors border-r border-gray-200">
+                                    1
+                                </button>
+                                <button className="relative inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors">
+                                    Siguiente
+                                </button>
+                            </nav>
+                        </div>
                     </div>
                 </div>
             </div>
