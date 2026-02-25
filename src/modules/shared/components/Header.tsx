@@ -5,18 +5,26 @@ import { useAuth } from "../../auth/hooks/useAuth";
 import LinkAnimated from "./LinkAnimated";
 import UserButton from "../../user/components/UserButton";
 import UserButtonPhone from "../../user/components/UserButtonPhone";
-import { useLocation, useNavigate } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 import clsx from "clsx";
+import ConfirmModal from "./ConfirmModal";
+import { useCart } from "../../cart/hooks/useCart";
 
 export default function Header() {
     const { isLogin } = useAuth();
     const location = useLocation();
     const [showCart, setShowCart] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
     const navigate = useNavigate();
+    const { storeId } = useParams();
+    const { hasItems, clearCart } = useCart();
 
     useEffect(() => {
-        const shouldShow = !location.pathname.startsWith("/dashboard");
+        const isRoot = location.pathname === "/";
+        const isAuth = location.pathname.startsWith("/auth");
+        const isStorePage = /^\/[^/]+$/.test(location.pathname);
+        const shouldShow = !location.pathname.startsWith("/dashboard") && !isAuth && !isRoot && !isStorePage;
         setShowCart(shouldShow);
     }, [location.pathname]);
 
@@ -27,6 +35,24 @@ export default function Header() {
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
+
+    const handleLogoClick = () => {
+        // If we are already on root, do nothing or just navigate
+        if (location.pathname === "/") return;
+
+        // If we have items in the cart, warn the user they will lose them
+        if (hasItems) {
+            setShowConfirmModal(true);
+        } else {
+            navigate("/");
+        }
+    };
+
+    const handleConfirmLeave = () => {
+        clearCart();
+        setShowConfirmModal(false);
+        navigate("/");
+    };
 
     return (
         <header className="relative z-50 h-[88px]">
@@ -47,7 +73,7 @@ export default function Header() {
                                 "flex items-center gap-2 cursor-pointer transition-transform duration-300 hover:scale-105 active:scale-95",
                                 scrolled ? "scale-90 hover:scale-95" : ""
                             )}
-                            onClick={() => navigate("/")}
+                            onClick={handleLogoClick}
                         >
                             <Logo />
                         </div>
@@ -80,6 +106,16 @@ export default function Header() {
                     </nav>
                 </div>
             </div>
+
+            <ConfirmModal
+                isOpen={showConfirmModal}
+                title="¿Estás seguro de salir?"
+                message="Tienes productos en el carrito de este corralón. Si vuelves al inicio a buscar otros corralones, tu carrito actual se vaciará."
+                confirmText="Sí, vaciar carrito y salir"
+                cancelText="Mantenerme aquí"
+                onConfirm={handleConfirmLeave}
+                onCancel={() => setShowConfirmModal(false)}
+            />
         </header>
     );
 }

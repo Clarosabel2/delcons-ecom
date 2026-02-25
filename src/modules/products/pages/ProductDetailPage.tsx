@@ -58,22 +58,6 @@ export default function ProductDetailPage() {
 
             {!loading && product && (
                 <div className="pt-5 px-2 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col gap-6">
-                    {/* Compact Business Header */}
-                    <header className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm overflow-hidden flex items-center justify-between gap-4 relative">
-                        <div className="absolute top-0 right-0 -mr-8 -mt-6 w-24 h-24 rounded-full bg-blue-50/50 pointer-events-none" />
-                        <div className="flex items-center gap-3 relative z-10">
-                            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-white shadow-sm border border-gray-100 shrink-0">
-                                <img src="/casa_borda_logo.png" alt="Logo" className="object-contain w-8 h-8" />
-                            </div>
-                            <div>
-                                <h1 className="text-xl font-extrabold text-gray-900 tracking-tight leading-none mb-1 line-clamp-1">
-                                    Corralón "Casa Borda"
-                                </h1>
-                                <p className="text-xs text-blue-600 font-semibold tracking-wide uppercase">Catálogo Electrónico</p>
-                            </div>
-                        </div>
-                    </header>
-
                     <ProductDetails
                         product={product}
                         quantity={quantity}

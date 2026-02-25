@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router";
 import "./styles/App.css";
 
 import ProductsPage from "./modules/products/pages/ProductsPage";
@@ -17,22 +17,36 @@ import AccountPage from "./modules/user/pages/AccountPage";
 import SettingsPage from "./modules/user/pages/SettingsPage";
 import OrdersPage from "./modules/orders/pages/OrdersPage";
 
+import StoreLayout from "./modules/store/layouts/StoreLayout";
+import StorePage from "./modules/store/pages/StorePage";
+import StoresListPage from "./modules/store/pages/StoresListPage";
+
+import ScrollToTop from "./modules/shared/components/ScrollToTop";
+
 function App() {
     return (
         <BrowserRouter>
+            <ScrollToTop />
             <Routes>
                 <Route element={<MainLayout />}>
-                    <Route path="/" element={<ProductsPage />} />
-                    <Route
-                        path="/products/:id"
-                        element={<ProductDetailPage />}
-                    />
+                    <Route path="/" element={<StoresListPage />} />
                     <Route path="/cart" element={<CartDetailPage />} />
                 </Route>
+
+                {/* Store Routes */}
+                <Route path="/:storeId" element={<StoreLayout />}>
+                    <Route index element={<StorePage />} />
+                    <Route path="products" element={<ProductsPage />} />
+                    <Route path="products/:id" element={<ProductDetailPage />} />
+                </Route>
+
+                {/* Auth Routes */}
                 <Route path="/auth" element={<AuthLayout />}>
                     <Route index element={<LoginPage />} />
                     <Route path="register" element={<RegisterPage />} />
                 </Route>
+
+                {/* Protected Routes */}
                 <Route element={<ProtectedRoute />}>
                     <Route element={<MainLayout />}>
                         <Route path="/account" element={<AccountPage />} />

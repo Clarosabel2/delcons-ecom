@@ -8,51 +8,67 @@ interface CartItemProps {
     item: Item;
 }
 
-
 export default function CartItem({ item }: CartItemProps) {
-    const { cart, addItem, removeItem, updateItemQuantity } = useCart();
+    const { removeItem, updateItemQuantity } = useCart();
+
+    const formatCurrency = (amount: number) => {
+        return new Intl.NumberFormat('es-AR', {
+            style: 'currency',
+            currency: 'ARS',
+            maximumFractionDigits: 0
+        }).format(amount);
+    };
+
     return (
-        <div
-            key={item.id}
-            className="flex items-center justify-around gap-2 px-4 pt-1 font-light border-gray-300 border-t-1"
-        >
-            <p className="text-xs font-extralight ">{item.id}</p>
-            <section className="">
+        <div className="group flex gap-3 p-3 mb-2 bg-white border border-gray-100 rounded-xl shadow-[0_2px_8px_-3px_rgba(0,0,0,0.05)] hover:shadow-md transition-all duration-300 relative">
+
+            {/* Botón Eliminar */}
+            <button
+                onClick={() => removeItem(item.product.id)}
+                className="absolute top-2 right-2 p-1.5 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors z-10"
+                title="Eliminar producto"
+            >
+                <FaTrash className="w-3 h-3" />
+            </button>
+
+            {/* Imagen del Producto */}
+            <div className="shrink-0 w-16 h-16 sm:w-20 sm:h-20 bg-gray-50 rounded-lg overflow-hidden border border-gray-100 flex items-center justify-center p-1.5">
                 <img
                     src={item.product.images[0]}
                     alt={item.product.title}
-                    className="object-contain w-20 h-16 rounded max-w-24"
+                    className="object-contain w-full h-full mix-blend-multiply transition-transform group-hover:scale-105"
                 />
-            </section>
-            <section className="flex flex-col w-full">
-                <p className="line-clamp-1">
-                    <strong>{item.product.title}</strong>
-                </p>
-                <div className="ml-2 text-xs">
-                    <p>
-                        Cantidad: {item.quantity.toFixed(2)}
-                    </p>
-                    <p>
-                        Subtotal: ${Number(item.subtotal.toFixed(2))}
+            </div>
+
+            {/* Detalles y Acciones */}
+            <div className="flex flex-col flex-1 justify-between min-w-0 pr-7 py-0.5">
+
+                {/* Título y Precio Unitario */}
+                <div>
+                    <h4 className="text-xs sm:text-sm font-bold text-gray-900 line-clamp-2 leading-tight mb-1 pr-1">
+                        {item.product.title}
+                    </h4>
+                    <p className="text-[10px] sm:text-xs text-gray-400 font-medium mb-2">
+                        {formatCurrency(item.product.price)} c/u
                     </p>
                 </div>
-            </section>
-            <div>
-                {item.quantity !== 1 ? (
-                    <QuantitySelector
-                        value={item.quantity}
-                        onChange={(newQuantity) => updateItemQuantity(item.product.id, newQuantity)}
-                    />
-                ) : (
-                    <button
-                        className="p-2 text-red-500 border cursor-pointer rounded-xl hover:text-red-700 hover:bg-gray-100"
-                        onClick={() => removeItem(item.product.id)}
-                    >
-                        <FaTrash />
-                    </button>
-                )}
+
+                {/* Cantidad y Subtotal */}
+                <div className="flex flex-wrap items-end justify-between gap-2 mt-auto">
+                    <div className="scale-90 origin-bottom-left -ml-1">
+                        <QuantitySelector
+                            value={item.quantity}
+                            onChange={(newQuantity) => updateItemQuantity(item.product.id, newQuantity)}
+                        />
+                    </div>
+
+                    <div className="text-right">
+                        <span className="text-sm font-black text-blue-600 block leading-none">
+                            {formatCurrency(item.subtotal)}
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
     );
 }
-

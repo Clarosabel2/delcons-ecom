@@ -7,6 +7,9 @@ export interface IStore {
     email: string;
     logo: string;
     banner: string;
+    rating?: number;
+    reviewsCount?: number;
+    tags?: string[];
     socialMedia: {
         facebook: string;
         instagram: string;

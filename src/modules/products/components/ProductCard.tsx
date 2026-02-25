@@ -9,14 +9,15 @@ import clsx from "clsx";
 
 interface ProductCardProps {
     product: IProduct;
+    storeId: string;
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ product, storeId }: ProductCardProps) {
     const navigate = useNavigate();
     const { cart, addItem } = useCart();
 
     const handleClick = () => {
-        navigate(`/products/${product.id}`);
+        navigate(`/${storeId}/products/${product.id}`);
     };
     const existingItem = cart.items.find((i) => i.product.id === product.id);
 
@@ -36,9 +37,17 @@ export default function ProductCard({ product }: ProductCardProps) {
                 {/* Overlay gradient for premium feel */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
+                {/* In Cart Badge */}
+                {existingItem && (
+                    <div className="absolute bottom-2 left-2 flex items-center gap-1.5 bg-blue-600 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-lg shadow-blue-500/30 tracking-wider z-10">
+                        <FaCartPlus className="w-2 h-2" />
+                        <span>En carrito ({existingItem.quantity})</span>
+                    </div>
+                )}
+
                 {/* Discount Badge */}
                 {product.discountPercentage && (
-                    <div className="absolute top-4 right-4 bg-rose-500 text-white text-[10px] font-bold px-3 py-1.5 rounded-full shadow-lg shadow-rose-500/30 tracking-wider">
+                    <div className="absolute top-4 right-4 bg-rose-500 text-white text-[10px] font-bold px-3 py-1.5 rounded-full shadow-lg shadow-rose-500/30 tracking-wider z-10">
                         -{Math.round(product.discountPercentage)}%
                     </div>
                 )}
@@ -100,11 +109,6 @@ export default function ProductCard({ product }: ProductCardProps) {
                                 )} />
                                 {(product.stock ?? 0) > 0 ? `Stock: ${product.stock}` : "Agotado"}
                             </span>
-                            {existingItem && (
-                                <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded-sm">
-                                    En carrito ({existingItem.quantity})
-                                </span>
-                            )}
                         </div>
                     </div>
 
